@@ -1015,8 +1015,7 @@ function exportarCSV(){
     r.alturaOd||'',r.alturaOi||'',
     r.montura,r.lente,r.costo,r.factor,r.descPct||0,r.descMonto||0,r.total,r.ganancia,r.margen
   ]);
-  const csv=[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('
-');
+  const csv=[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n');
   const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
