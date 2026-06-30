@@ -2,13 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#6ee7c7">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="OPTI CV">
-<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OPTI CV · Registro</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -263,8 +257,8 @@ textarea{resize:vertical;min-height:68px;}
       <div class="modal-step"><strong>PASO 3 —</strong> Borra el código actual y pega este:</div>
     </div>
     <div style="position:relative">
-      <div class="modal-code" id="codigo-script">var HEADERS=['id','fecha','fechaAtencion','fechaEntrega','cliente','telefono','odEsfera','odCilindro','odEje','odAdd','oiEsfera','oiCilindro','oiEje','oiAdd','dpEsfera','dpCilindro','dpEje','dpAdd','tipoLente','materialLente','filtros','colorLente','claseMontura','observaciones','alturaOd','alturaOi','montura','lente','costo','factor','descPct','descMonto','total','ganancia','margen'];
-var LABELS=['ID','Fecha','F.Atencion','F.Entrega','Paciente','Telefono','OD Esfera','OD Cil','OD Eje','OD Add','OI Esfera','OI Cil','OI Eje','OI Add','DP Esfera','DP Cil','DP Eje','DP Add','Tipo Lente','Material','Filtros','Color','Clase Montura','Observaciones','Altura OD mm','Altura OI mm','Marco $','Lente $','Costo $','Factor','Desc%','Desc$','Total$','Ganancia$','Margen%'];
+      <div class="modal-code" id="codigo-script">var HEADERS=['id','fecha','fechaAtencion','fechaEntrega','cliente','telefono','edad','odEsfera','odCilindro','odEje','odAdd','oiEsfera','oiCilindro','oiEje','oiAdd','dpEsfera','dpCilindro','dpEje','dpAdd','tipoLente','materialLente','filtros','colorLente','claseMontura','observaciones','alturaOd','alturaOi','montura','lente','costo','factor','kit','estuche','domicilio','adicionales','descPct','descMonto','total','ganancia','margen'];
+var LABELS=['ID','Fecha','F.Atencion','F.Entrega','Paciente','Telefono','Edad','OD Esfera','OD Cil','OD Eje','OD Add','OI Esfera','OI Cil','OI Eje','OI Add','DP Esfera','DP Cil','DP Eje','DP Add','Tipo Lente','Material','Filtros','Color','Clase Montura','Observaciones','Altura OD mm','Altura OI mm','Marco $','Lente $','Costo $','Factor','Kit $','Estuche $','Domicilio $','Adicionales $','Desc%','Desc$','Total$','Ganancia$','Margen%'];
 function getSheet(){return SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();}
 function doGet(e){
   var s=getSheet(),last=s.getLastRow(),rows=[];
@@ -276,7 +270,7 @@ function doGet(e){
 function doPost(e){
   var s=getSheet(),d=JSON.parse(e.postData.contents);
   if(s.getLastRow()===0){s.appendRow(LABELS);s.getRange(1,1,1,LABELS.length).setFontWeight('bold').setBackground('#1a1d27').setFontColor('#6ee7c7');s.setFrozenRows(1);}
-  s.appendRow([d.id||Date.now(),d.fecha||'',d.fechaAtencion||'',d.fechaEntrega||'',d.cliente||'',d.telefono||'',d.odEsfera||'',d.odCilindro||'',d.odEje||'',d.odAdd||'',d.oiEsfera||'',d.oiCilindro||'',d.oiEje||'',d.oiAdd||'',d.dpEsfera||'',d.dpCilindro||'',d.dpEje||'',d.dpAdd||'',d.tipoLente||'',d.materialLente||'',d.filtros||'',d.colorLente||'',d.claseMontura||'',d.observaciones||'',d.alturaOd||'',d.alturaOi||'',d.montura||0,d.lente||0,d.costo||0,d.factor||0,d.descPct||0,d.descMonto||0,d.total||0,d.ganancia||0,d.margen||0]);
+  s.appendRow([d.id||Date.now(),d.fecha||'',d.fechaAtencion||'',d.fechaEntrega||'',d.cliente||'',d.telefono||'',d.edad||'',d.odEsfera||'',d.odCilindro||'',d.odEje||'',d.odAdd||'',d.oiEsfera||'',d.oiCilindro||'',d.oiEje||'',d.oiAdd||'',d.dpEsfera||'',d.dpCilindro||'',d.dpEje||'',d.dpAdd||'',d.tipoLente||'',d.materialLente||'',d.filtros||'',d.colorLente||'',d.claseMontura||'',d.observaciones||'',d.alturaOd||'',d.alturaOi||'',d.montura||0,d.lente||0,d.costo||0,d.factor||0,d.kit||0,d.estuche||0,d.domicilio||0,d.adicionales||0,d.descPct||0,d.descMonto||0,d.total||0,d.ganancia||0,d.margen||0]);
   return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);}</div>
       <button onclick="copiarCodigo()" id="btn-copiar"
         style="position:absolute;top:6px;right:6px;background:rgba(167,139,250,.2);border:1px solid rgba(167,139,250,.4);color:var(--accent2);border-radius:8px;padding:4px 10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;">📋 Copiar</button>
@@ -327,9 +321,16 @@ function doPost(e){
       <input type="tel" id="telefono" placeholder="Ej: 3001234567">
     </div>
     <div class="field">
-      <label>Fecha atención</label>
-      <input type="date" id="fecha-atencion">
+      <label>Edad</label>
+      <div class="input-wrap has-suffix">
+        <input type="number" id="edad" placeholder="Ej: 35" min="1" max="120">
+        <span class="suffix" style="color:var(--muted);font-size:12px">años</span>
+      </div>
     </div>
+  </div>
+  <div class="field">
+    <label>Fecha atención</label>
+    <input type="date" id="fecha-atencion">
   </div>
   <div class="field">
     <label>📦 Fecha de entrega</label>
@@ -423,6 +424,32 @@ function doPost(e){
     <span style="font-size:18px">🧮</span>
     <span class="txt">Factor <strong id="info-factor">0.48</strong> → ×<strong id="info-mult">2.0833</strong> · Margen <strong id="info-margen">52.0%</strong> sobre precio final</span>
   </div>
+  <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+    <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">➕ Adicionales (sin factor de ganancia)</div>
+    <div class="two-col">
+      <div class="field">
+        <label>🧴 Kit de limpieza</label>
+        <div class="input-wrap has-prefix">
+          <span class="prefix">$</span>
+          <input type="number" id="kit-limpieza" placeholder="0" min="0" oninput="calcular()">
+        </div>
+      </div>
+      <div class="field">
+        <label>🕶️ Estuche</label>
+        <div class="input-wrap has-prefix">
+          <span class="prefix">$</span>
+          <input type="number" id="estuche" placeholder="0" min="0" oninput="calcular()">
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>🛵 Valor de domicilio</label>
+      <div class="input-wrap has-prefix">
+        <span class="prefix">$</span>
+        <input type="number" id="domicilio" placeholder="0" min="0" oninput="calcular()">
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- DESCUENTO -->
@@ -452,6 +479,18 @@ function doPost(e){
     <div class="brow" id="row-desc" style="display:none">
       <span class="brow-label">🏷️ Descuento (<span id="lbl-pct">0</span>%)</span>
       <span class="brow-value yellow" id="res-desc">- $ 0</span>
+    </div>
+    <div class="brow" id="row-kit" style="display:none">
+      <span class="brow-label">🧴 Kit de limpieza</span>
+      <span class="brow-value" id="res-kit">$ 0</span>
+    </div>
+    <div class="brow" id="row-estuche" style="display:none">
+      <span class="brow-label">🕶️ Estuche</span>
+      <span class="brow-value" id="res-estuche">$ 0</span>
+    </div>
+    <div class="brow" id="row-domicilio" style="display:none">
+      <span class="brow-label">🛵 Domicilio</span>
+      <span class="brow-value" id="res-domicilio">$ 0</span>
     </div>
   </div>
   <div class="total-hero">
@@ -654,6 +693,7 @@ async function cargarDesdeSheets(){
         fechaEntrega:  String(r.fechaEntrega||''),
         cliente:       String(r.cliente||''),
         telefono:      norm(r.telefono),
+        edad:          String(r.edad||''),
         odEsfera:      String(r.odEsfera||''),  odCilindro: String(r.odCilindro||''),
         odEje:         String(r.odEje||''),      odAdd:      String(r.odAdd||''),
         oiEsfera:      String(r.oiEsfera||''),  oiCilindro: String(r.oiCilindro||''),
@@ -670,6 +710,8 @@ async function cargarDesdeSheets(){
         alturaOi:      String(r.alturaOi||''),
         montura:  Number(r.montura)||0,  lente:    Number(r.lente)||0,
         costo:    Number(r.costo)||0,    factor:   Number(r.factor)||0.48,
+        kit:      Number(r.kit)||0,      estuche:  Number(r.estuche)||0,
+        domicilio:Number(r.domicilio)||0, adicionales:Number(r.adicionales)||0,
         descPct:  Number(r.descPct)||0,  descMonto:Number(r.descMonto)||0,
         total:    Number(r.total)||0,    ganancia: Number(r.ganancia)||0,
         margen:   String(r.margen||'0')
@@ -724,11 +766,20 @@ function calcular(){
   const lente   = parseFloat(document.getElementById('lente').value)||0;
   const factor  = parseFloat(document.getElementById('factor').value)||0.48;
   const descPct = conDesc?(parseFloat(document.getElementById('descuento').value)||0):0;
+  const kit      = parseFloat(document.getElementById('kit-limpieza').value)||0;
+  const estuche  = parseFloat(document.getElementById('estuche').value)||0;
+  const domicilio= parseFloat(document.getElementById('domicilio').value)||0;
+
+  // Montura y lente aplican factor de ganancia
   const costo     = montura+lente;
   const base      = factor>0?costo/factor:0;
   const descMonto = base*(descPct/100);
-  const total     = base-descMonto;
-  const ganancia  = total-costo;
+  const baseConDesc = base-descMonto;
+
+  // Adicionales se suman directo al total SIN factor
+  const adicionales = kit+estuche+domicilio;
+  const total     = baseConDesc+adicionales;
+  const ganancia  = baseConDesc-costo; // ganancia solo sobre montura/lente
   const margen    = total>0?(ganancia/total)*100:0;
 
   document.getElementById('res-montura').textContent = fmt(montura);
@@ -747,6 +798,19 @@ function calcular(){
     document.getElementById('lbl-pct').textContent =descPct;
     document.getElementById('res-desc').textContent='- '+fmt(descMonto);
   } else { rowDesc.style.display='none'; }
+
+  // Mostrar/ocultar filas de adicionales
+  const rowKit=document.getElementById('row-kit');
+  if(kit>0){rowKit.style.display='flex';document.getElementById('res-kit').textContent=fmt(kit);}
+  else{rowKit.style.display='none';}
+
+  const rowEst=document.getElementById('row-estuche');
+  if(estuche>0){rowEst.style.display='flex';document.getElementById('res-estuche').textContent=fmt(estuche);}
+  else{rowEst.style.display='none';}
+
+  const rowDom=document.getElementById('row-domicilio');
+  if(domicilio>0){rowDom.style.display='flex';document.getElementById('res-domicilio').textContent=fmt(domicilio);}
+  else{rowDom.style.display='none';}
 
   document.getElementById('info-factor').textContent = factor;
   document.getElementById('info-mult').textContent   = (1/factor).toFixed(4);
@@ -781,18 +845,24 @@ function actualizarAviso(){
 async function guardarRegistro(){
   const cliente  = document.getElementById('cliente').value.trim()||'Sin nombre';
   const telefono = norm(document.getElementById('telefono').value);
+  const edad     = document.getElementById('edad').value||'';
   const montura  = parseFloat(document.getElementById('montura').value)||0;
   const lente    = parseFloat(document.getElementById('lente').value)||0;
   const factor   = parseFloat(document.getElementById('factor').value)||0.48;
   const descPct  = conDesc?(parseFloat(document.getElementById('descuento').value)||0):0;
+  const kit      = parseFloat(document.getElementById('kit-limpieza').value)||0;
+  const estuche  = parseFloat(document.getElementById('estuche').value)||0;
+  const domicilio= parseFloat(document.getElementById('domicilio').value)||0;
 
-  if(montura===0&&lente===0){toast('⚠️ Ingresa montura o lente','#f87171','#fff');return;}
+  if(montura===0&&lente===0&&kit===0&&estuche===0&&domicilio===0){toast('⚠️ Ingresa al menos un valor','#f87171','#fff');return;}
 
   const costo=montura+lente;
   const base=costo/factor;
   const descMonto=base*(descPct/100);
-  const total=base-descMonto;
-  const ganancia=total-costo;
+  const baseConDesc=base-descMonto;
+  const adicionales=kit+estuche+domicilio;
+  const total=baseConDesc+adicionales;
+  const ganancia=baseConDesc-costo;
   const margen=total>0?(ganancia/total)*100:0;
 
   const reg={
@@ -800,7 +870,7 @@ async function guardarRegistro(){
     fecha:new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}),
     fechaAtencion: document.getElementById('fecha-atencion').value,
     fechaEntrega:  document.getElementById('fecha-entrega').value,
-    cliente, telefono,
+    cliente, telefono, edad,
     odEsfera:  document.getElementById('od-esfera').value,
     odCilindro:document.getElementById('od-cilindro').value,
     odEje:     document.getElementById('od-eje').value,
@@ -822,6 +892,7 @@ async function guardarRegistro(){
     alturaOd: document.getElementById('altura-od').value,
     alturaOi: document.getElementById('altura-oi').value,
     montura,lente,factor,costo,
+    kit,estuche,domicilio,adicionales,
     descPct,descMonto:Math.round(descMonto),
     total:Math.round(total),ganancia:Math.round(ganancia),
     margen:margen.toFixed(1)
@@ -843,11 +914,11 @@ async function guardarRegistro(){
 
 // ── LIMPIAR ──
 function limpiarFormulario(){
-  ['cliente','telefono','fecha-entrega',
+  ['cliente','telefono','edad','fecha-entrega',
    'od-esfera','od-cilindro','od-eje','od-add',
    'oi-esfera','oi-cilindro','oi-eje','oi-add',
    'dp-esfera','dp-cilindro','dp-eje','dp-add',
-   'montura','lente','descuento',
+   'montura','lente','descuento','kit-limpieza','estuche','domicilio',
    'tipo-lente','material-lente','filtros','color-lente','clase-montura','altura-od','altura-oi','observaciones'
   ].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('entrega-aviso').style.display='none';
@@ -886,14 +957,15 @@ function verDetalle(id){
   const r=registros.find(x=>x.id===id);if(!r)return;
   const desc=r.descPct>0?`
 🏷️ Descuento: -${r.descPct}% (-${fmt(r.descMonto)})`:'';
-  const msg=`👤 ${r.cliente}  📞 ${r.telefono||'—'}
+  const adics=(r.kit>0||r.estuche>0||r.domicilio>0)?`\n🧴 Kit:${fmt(r.kit||0)} Estuche:${fmt(r.estuche||0)} Domicilio:${fmt(r.domicilio||0)}`:'';
+  const msg=`👤 ${r.cliente}  📞 ${r.telefono||'—'}${r.edad?' · '+r.edad+' años':''}
 
 OD: ${r.odEsfera||'—'} / ${r.odCilindro||'—'} / ${r.odEje||'—'} Add:${r.odAdd||'—'}
 OI: ${r.oiEsfera||'—'} / ${r.oiCilindro||'—'} / ${r.oiEje||'—'} Add:${r.oiAdd||'—'}
 
 🕶️ ${r.tipoLente||'—'} · ${r.materialLente||'—'} · ${r.filtros||'—'}
 
-💰 Marco:${fmt(r.montura)} Lente:${fmt(r.lente)} Costo:${fmt(r.costo)}${desc}
+💰 Marco:${fmt(r.montura)} Lente:${fmt(r.lente)} Costo:${fmt(r.costo)}${desc}${adics}
 💳 Total: ${fmt(r.total)} · Ganancia: ${fmt(r.ganancia)} (${r.margen}%)
 📅 Atención:${r.fechaAtencion||'—'} · Entrega:${r.fechaEntrega||'—'}
 
@@ -951,7 +1023,7 @@ function buscarCliente(){
       <div class="cr-header">
         <div>
           <div class="cr-nombre">👤 ${r.cliente}</div>
-          <div class="cr-tel">📞 ${r.telefono||'—'}</div>
+          <div class="cr-tel">📞 ${r.telefono||'—'}${r.edad?' · '+r.edad+' años':''}</div>
         </div>
         <div style="text-align:right">
           <div class="cr-total">${fmt(r.total)}</div>
@@ -985,6 +1057,9 @@ function buscarCliente(){
         <div><div class="cr-lbl">Lente(s)</div><div class="cr-val">${fmt(r.lente)}</div></div>
         <div><div class="cr-lbl">Costo total</div><div class="cr-val" style="color:var(--accent2)">${fmt(r.costo)}</div></div>
         <div><div class="cr-lbl">Tu ganancia</div><div class="cr-val" style="color:var(--accent)">${fmt(r.ganancia)}</div></div>
+        ${(r.kit>0)?`<div><div class="cr-lbl">Kit limpieza</div><div class="cr-val">${fmt(r.kit)}</div></div>`:''}
+        ${(r.estuche>0)?`<div><div class="cr-lbl">Estuche</div><div class="cr-val">${fmt(r.estuche)}</div></div>`:''}
+        ${(r.domicilio>0)?`<div><div class="cr-lbl">Domicilio</div><div class="cr-val">${fmt(r.domicilio)}</div></div>`:''}
       </div>
       <div class="cr-fecha">📅 Registrado: ${r.fecha} · Atención: ${r.fechaAtencion||'—'}</div>
     </div>`;
@@ -999,21 +1074,21 @@ function limpiarBusqueda(){
 // ── EXPORT CSV ──
 function exportarCSV(){
   if(registros.length===0){toast('⚠️ No hay registros','#f87171','#fff');return;}
-  const headers=['Fecha','F.Atencion','F.Entrega','Paciente','Telefono',
+  const headers=['Fecha','F.Atencion','F.Entrega','Paciente','Telefono','Edad',
     'OD Esfera','OD Cil','OD Eje','OD Add','OI Esfera','OI Cil','OI Eje','OI Add',
     'DP Esfera','DP Cil','DP Eje','DP Add','Tipo Lente','Material','Filtros',
     'Color','Clase Montura','Observaciones',
     'Altura OD (mm)','Altura OI (mm)',
-    'Marco $','Lente $','Costo $','Factor','Desc%','Desc$','Total$','Ganancia$','Margen%'];
+    'Marco $','Lente $','Costo $','Factor','Kit $','Estuche $','Domicilio $','Adicionales $','Desc%','Desc$','Total$','Ganancia$','Margen%'];
   const rows=registros.map(r=>[
-    r.fecha,r.fechaAtencion||'',r.fechaEntrega||'',r.cliente,r.telefono||'',
+    r.fecha,r.fechaAtencion||'',r.fechaEntrega||'',r.cliente,r.telefono||'',r.edad||'',
     r.odEsfera||'',r.odCilindro||'',r.odEje||'',r.odAdd||'',
     r.oiEsfera||'',r.oiCilindro||'',r.oiEje||'',r.oiAdd||'',
     r.dpEsfera||'',r.dpCilindro||'',r.dpEje||'',r.dpAdd||'',
     r.tipoLente||'',r.materialLente||'',r.filtros||'',
     r.colorLente||'',r.claseMontura||'',r.observaciones||'',
     r.alturaOd||'',r.alturaOi||'',
-    r.montura,r.lente,r.costo,r.factor,r.descPct||0,r.descMonto||0,r.total,r.ganancia,r.margen
+    r.montura,r.lente,r.costo,r.factor,r.kit||0,r.estuche||0,r.domicilio||0,r.adicionales||0,r.descPct||0,r.descMonto||0,r.total,r.ganancia,r.margen
   ]);
   const csv=[headers,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n');
   const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
@@ -1063,15 +1138,6 @@ calcular();
     },{passive:false});
   });
 })();
-
-// ── SERVICE WORKER (PWA instalable en Android) ──
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('./sw.js')
-      .then(r=>console.log('OPTI CV PWA lista'))
-      .catch(e=>console.log('SW:',e));
-  });
-}
 </script>
 </body>
 </html>
